@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ReqValidator.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mahautdharcourt <mahautdharcourt@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 13:38:52 by md-harco          #+#    #+#             */
-/*   Updated: 2025/05/28 12:49:45 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/05/30 12:22:01 by mahautdharc      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,25 @@ const LocationConfig*	RequestValidator::find_matching_location(const std::string
 
 bool	RequestValidator::is_method_allowed(const std::string& method, const LocationConfig& location) const
 {
-	
+	if (location.methods.empty())
+		return true; // If no methods are specified, all methods are allowed
+	for (std::vector<std::string>::const_iterator it = location.methods.begin(); it != location.methods.end(); ++it)
+	{
+		if (*it == method)
+			return true; // Method is allowed
+	}
+	return false; // Method is not allowed
 }
 
 // bool	RequestValidator::is_body_size_valid(const Request& request, const LocationConfig& location) const
 // {
+// 	// Check if the request body size exceeds the limit specified in the location config
+// 	size_t body_size = request.get_body().size();
+// 	if (body_size > MAX_BODY_SIZE)
+// 	{
+// 		return false; // Body size exceeds the limit
+// 	}
+// 	return true; // Body size is valid
 	
 // }
 
@@ -119,12 +133,19 @@ ValidationResult	RequestValidator::validate(const Request& request) const
 
 	// if (!is_body_size_valid(request, *res.location))
 	// {
-		
+	// 	res.error_message = "Request body size exceeds the limit for " + res.location->path;
+	// 	res.is_valid = false; 
+	// 	res.error_code = 413; // Payload Too Large
+	// 	return res;		
 	// }
 
 	res.is_valid = true;
 	return res;
 }
+
+
+
+
 
 /*
 // 1. Parse syntaxique
